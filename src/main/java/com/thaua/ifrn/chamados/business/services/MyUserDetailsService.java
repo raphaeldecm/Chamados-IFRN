@@ -1,6 +1,6 @@
 package com.thaua.ifrn.chamados.business.services;
 
-import com.thaua.ifrn.chamados.exceptions.UserNotFoundException;
+import com.thaua.ifrn.chamados.http.exceptions.UserNotFoundException;
 import com.thaua.ifrn.chamados.persistence.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

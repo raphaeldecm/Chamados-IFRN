@@ -1,4 +1,4 @@
-package com.thaua.ifrn.chamados.exceptions;
+package com.thaua.ifrn.chamados.http.exceptions;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {

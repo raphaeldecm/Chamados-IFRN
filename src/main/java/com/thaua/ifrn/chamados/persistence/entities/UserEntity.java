@@ -36,7 +36,7 @@ public class UserEntity implements UserDetails {
 
     private boolean active;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private TokenEntity token;
 
     @Override
