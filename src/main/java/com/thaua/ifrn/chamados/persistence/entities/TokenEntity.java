@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Table(name = "token_tb")
+@Table(name = "tokens_tb")
 @Entity
 @Builder
 @Getter @Setter

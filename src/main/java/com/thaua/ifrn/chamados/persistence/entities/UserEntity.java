@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-@Table(name = "user_tb")
+@Table(name = "users_tb")
 @Entity
 @Builder
 @Getter @Setter
