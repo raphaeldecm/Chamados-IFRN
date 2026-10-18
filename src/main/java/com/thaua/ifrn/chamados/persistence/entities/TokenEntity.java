@@ -23,6 +23,7 @@ public class TokenEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
+    @Builder.Default
     private boolean expired = false;
 
     @OneToOne

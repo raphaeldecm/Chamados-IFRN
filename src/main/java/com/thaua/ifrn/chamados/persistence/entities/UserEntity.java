@@ -34,7 +34,8 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private boolean active;
+    @Builder.Default
+    private boolean active = true;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private TokenEntity token;

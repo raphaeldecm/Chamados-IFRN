@@ -39,6 +39,6 @@ public class AuthFilter extends OncePerRequestFilter {
 
         }
 
-        this.doFilterInternal(request, response, filterChain);
+        filterChain.doFilter(request, response);
     }
 }

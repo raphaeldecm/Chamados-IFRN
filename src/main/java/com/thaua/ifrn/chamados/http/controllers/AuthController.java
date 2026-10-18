@@ -2,9 +2,12 @@ package com.thaua.ifrn.chamados.http.controllers;
 
 import com.thaua.ifrn.chamados.business.services.AuthService;
 import com.thaua.ifrn.chamados.http.dto.request.auth.LoginRequest;
+import com.thaua.ifrn.chamados.http.dto.request.auth.RegisterRequest;
 import com.thaua.ifrn.chamados.http.dto.response.auth.AuthLoginResponse;
+import com.thaua.ifrn.chamados.http.dto.response.auth.AuthResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthLoginResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.authService.register(request));
+    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthLoginResponse> login(@Valid @RequestBody LoginRequest request) {
