@@ -1,4 +1,73 @@
-name: stress_test.yml
+name: Performance Tests
+
 on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
+  performance-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Instalar k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Iniciar o banco de dados
+        run: docker compose up -d --wait --wait-timeout 120
+
+      - name: Compilar e testar a aplicação
+        run: mvn --batch-mode verify
+
+      - name: Iniciar a aplicação
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/app_test
+          SPRING_DATASOURCE_USERNAME: app
+          SPRING_DATASOURCE_PASSWORD: test_password
+        run: |
+          nohup mvn spring-boot:run > app.log 2>&1 &
+
+      - name: Aguardar a aplicação
+        run: |
+          for i in $(seq 1 60); do
+            if curl --silent --fail http://localhost:8080/server > /dev/null; then
+              echo "Aplicação disponível"
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          echo "A aplicação não iniciou a tempo"
+          cat app.log
+          exit 1
+
+      - name: Executar testes de performance
+        run: k6 run performance_test/7_cenarios.js
+
+      - name: Exibir logs em caso de falha
+        if: failure()
+        run: |
+          echo "=== Logs da aplicação ==="
+          cat app.log || true
+
+          echo "=== Estado dos containers ==="
+          docker compose ps
+
+          echo "=== Logs do Docker Compose ==="
+          docker compose logs --no-color || true
+
+      - name: Encerrar ambiente de testes
+        if: always()
+        run: docker compose down -v
