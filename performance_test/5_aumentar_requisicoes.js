@@ -4,7 +4,7 @@ import { check } from 'k6';
 export const options = {
     iterations: 100,
     thresholds: {
-        http_req_duration: ['p(95)<500'],
+        http_req_duration: ['p(95)<200'],
     },
 };
 
