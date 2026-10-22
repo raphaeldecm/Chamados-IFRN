@@ -10,6 +10,11 @@ jobs:
   performance-test:
     runs-on: ubuntu-latest
 
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/app_test
+      SPRING_DATASOURCE_USERNAME: app
+      SPRING_DATASOURCE_PASSWORD: test_password
+
     steps:
       - name: Baixar o código
         uses: actions/checkout@v4
@@ -28,15 +33,12 @@ jobs:
         run: docker compose up -d --wait --wait-timeout 120
 
       - name: Compilar e testar a aplicação
-        run: mvn --batch-mode verify
+        run: ./mvnw --batch-mode verify
 
       - name: Iniciar a aplicação
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/app_test
-          SPRING_DATASOURCE_USERNAME: app
-          SPRING_DATASOURCE_PASSWORD: test_password
         run: |
-          nohup mvn spring-boot:run > app.log 2>&1 &
+          nohup ./mvnw spring-boot:run > app.log 2>&1 &
+          echo $! > app.pid
 
       - name: Aguardar a aplicação
         run: |
