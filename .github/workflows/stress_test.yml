@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/app_test
-      SPRING_DATASOURCE_USERNAME: app
-      SPRING_DATASOURCE_PASSWORD: test_password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/ifrn_database
+      SPRING_DATASOURCE_USERNAME: ifrn
+      SPRING_DATASOURCE_PASSWORD: admin
 
     steps:
       - name: Baixar o código
