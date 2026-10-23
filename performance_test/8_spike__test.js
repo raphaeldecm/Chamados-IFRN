@@ -1,5 +1,6 @@
 import http from 'k6/http';
 import { check } from 'k6';
+import { Counter } from 'k6/metrics';
 
 const baseUrl = 'http://localhost:8080';
 
@@ -51,10 +52,12 @@ export const options = {
 
     thresholds: {
         http_req_failed: ['rate<0.01'],
-        http_req_duration: ['p(95)<500'],
+        http_req_duration: ['p(95)<140'],
         checks: ['rate>0.99'],
     },
 };
+
+const slowRequests = new Counter('requests_over_140ms');
 
 export default function (accessToken) {
     const url = `${baseUrl}/users/me`;
@@ -74,6 +77,9 @@ export default function (accessToken) {
         console.log(`Corpo: ${String(response.body ?? '<vazio ou nulo>').slice(0, 1000)}`);
     }
 
+    if (response.timings.duration > 140) {
+        slowRequests.add(1);
+    }
 
     check(response, {
         'status HTTP é 200': (r) => r.status === 200,
