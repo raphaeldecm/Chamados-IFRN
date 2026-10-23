@@ -1,4 +1,10 @@
 package com.thaua.ifrn.chamados.http.dto.response.sectors;
 
-public record SectorResponse() {
+import java.util.UUID;
+
+public record SectorResponse(
+        UUID id,
+        String name,
+        String acronym
+) {
 }

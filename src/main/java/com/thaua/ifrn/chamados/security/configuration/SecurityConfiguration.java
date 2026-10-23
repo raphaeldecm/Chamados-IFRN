@@ -1,6 +1,7 @@
 package com.thaua.ifrn.chamados.security.configuration;
 
 import com.thaua.ifrn.chamados.business.services.MyUserDetailsService;
+import com.thaua.ifrn.chamados.domain.enums.Role;
 import com.thaua.ifrn.chamados.security.filters.AuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +33,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/swagger/**", "/swagger-ui/**", "/v3/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/server/**").permitAll()
+                .requestMatchers("/sectors/**").hasRole(Role.ADMIN.name())
                 .anyRequest().authenticated()
         )
         .build();
