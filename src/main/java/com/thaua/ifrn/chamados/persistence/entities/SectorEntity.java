@@ -3,6 +3,7 @@ package com.thaua.ifrn.chamados.persistence.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -18,4 +19,10 @@ public class SectorEntity {
     private UUID id;
     private String name;
     private String acronym;
+
+    @OneToMany(mappedBy = "sector")
+    private List<TechnicalEntity> technicals;
+
+    @OneToMany(mappedBy = "sector")
+    private List<CategoryEntity> categories;
 }
