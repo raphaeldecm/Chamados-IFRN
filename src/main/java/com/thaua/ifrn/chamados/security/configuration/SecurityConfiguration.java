@@ -6,6 +6,7 @@ import com.thaua.ifrn.chamados.security.filters.AuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -33,6 +34,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/swagger/**", "/swagger-ui/**", "/v3/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/server/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/sectors/**").authenticated()
                 .requestMatchers("/sectors/**").hasRole(Role.ADMIN.name())
                 .anyRequest().authenticated()
         )

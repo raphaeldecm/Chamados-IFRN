@@ -5,10 +5,9 @@ import com.thaua.ifrn.chamados.http.dto.request.sectors.CreateSectorRequest;
 import com.thaua.ifrn.chamados.http.dto.response.sectors.SectorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/sectors")
@@ -21,5 +20,10 @@ public class SectorController {
             @RequestBody CreateSectorRequest request
     ) {
         return ResponseEntity.ok(this.sectorService.create(request));
+    }
+
+    @GetMapping("/{sectorId}")
+    public ResponseEntity<SectorResponse> fetch(@PathVariable UUID sectorId) {
+        return ResponseEntity.ok(this.sectorService.fetch(sectorId));
     }
 }
