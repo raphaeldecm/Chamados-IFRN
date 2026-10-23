@@ -2,6 +2,7 @@ package com.thaua.ifrn.chamados.persistence.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,6 +30,7 @@ public class InteractionEntity {
     private UserEntity authorId;
 
     @Builder.Default
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

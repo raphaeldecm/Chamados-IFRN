@@ -4,6 +4,7 @@ import com.thaua.ifrn.chamados.domain.enums.CalledStatus;
 import com.thaua.ifrn.chamados.domain.enums.Priority;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -52,6 +53,7 @@ public class CalledEntity {
     private LocalDateTime openingDate = LocalDateTime.now();
 
     @Builder.Default
+    @CreationTimestamp
     @Column(name = "closed_date")
     private LocalDateTime closedDate = LocalDateTime.now();
 }
