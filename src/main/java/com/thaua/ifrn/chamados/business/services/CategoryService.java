@@ -1,6 +1,7 @@
 package com.thaua.ifrn.chamados.business.services;
 
 import com.thaua.ifrn.chamados.http.dto.request.categories.CreateCategoryRequest;
+import com.thaua.ifrn.chamados.http.dto.request.categories.UpdateCategoryRequest;
 import com.thaua.ifrn.chamados.http.dto.response.categories.CategoryResponse;
 import com.thaua.ifrn.chamados.http.exceptions.CategoryNotFoundException;
 import com.thaua.ifrn.chamados.http.exceptions.SectorNotFoundException;
@@ -89,5 +90,20 @@ public class CategoryService {
 
         return this.categoryRepository.findAll(specification, pageable)
                 .map(this.categoryMapper::map);
+    }
+
+    public CategoryResponse update(UUID categoryId, UpdateCategoryRequest request) {
+        CategoryEntity categoryFound = this.categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        categoryFound.update(this.categoryMapper.map(request));
+
+        if (!categoryFound.getSector().getId().equals(request.sectorId())) {
+            SectorEntity sectorFound = this.sectorRepository.findById(request.sectorId())
+                    .orElseThrow(SectorNotFoundException::new);
+            categoryFound.setSector(sectorFound);
+        }
+
+        return this.categoryMapper.map(this.categoryRepository.save(categoryFound));
     }
 }

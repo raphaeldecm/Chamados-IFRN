@@ -1,5 +1,6 @@
 package com.thaua.ifrn.chamados.persistence.entities;
 
+import com.thaua.ifrn.chamados.domain.categories.UpdateCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,4 +24,9 @@ public class CategoryEntity {
     @ManyToOne
     @JoinColumn(name = "sector_id")
     private SectorEntity sector;
+
+    public void update(UpdateCategory updateCategory) {
+        this.name = updateCategory.getName();
+        this.description = updateCategory.getDescription();
+    }
 }

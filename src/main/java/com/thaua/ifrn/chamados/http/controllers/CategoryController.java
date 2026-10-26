@@ -2,6 +2,7 @@ package com.thaua.ifrn.chamados.http.controllers;
 
 import com.thaua.ifrn.chamados.business.services.CategoryService;
 import com.thaua.ifrn.chamados.http.dto.request.categories.CreateCategoryRequest;
+import com.thaua.ifrn.chamados.http.dto.request.categories.UpdateCategoryRequest;
 import com.thaua.ifrn.chamados.http.dto.response.categories.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -38,5 +39,13 @@ public class CategoryController {
             @RequestParam(required = false) UUID sectorId
     ) {
         return ResponseEntity.ok(this.categoryService.list(pageable, name, description, sectorName, sectorId))
+    }
+
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponse> update(
+            @PathVariable UUID categoryId,
+            @RequestBody UpdateCategoryRequest request
+    ) {
+        return ResponseEntity.ok(this.categoryService.update(categoryId, request));
     }
 }
