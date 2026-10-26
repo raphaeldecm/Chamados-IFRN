@@ -1,5 +1,6 @@
 package com.thaua.ifrn.chamados.persistence.entities;
 
+import com.thaua.ifrn.chamados.domain.sectors.UpdateSector;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,4 +26,9 @@ public class SectorEntity {
 
     @OneToMany(mappedBy = "sector")
     private List<CategoryEntity> categories;
+
+    public void update(UpdateSector updateSector) {
+        this.name = updateSector.getName();
+        this.acronym = updateSector.getAcronym();
+    }
 }

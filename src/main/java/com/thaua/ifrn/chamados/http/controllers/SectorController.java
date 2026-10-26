@@ -2,7 +2,9 @@ package com.thaua.ifrn.chamados.http.controllers;
 
 import com.thaua.ifrn.chamados.business.services.SectorService;
 import com.thaua.ifrn.chamados.http.dto.request.sectors.CreateSectorRequest;
+import com.thaua.ifrn.chamados.http.dto.request.sectors.UpdateSectorRequest;
 import com.thaua.ifrn.chamados.http.dto.response.sectors.SectorResponse;
+import com.thaua.ifrn.chamados.persistence.entities.SectorEntity;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -38,5 +40,10 @@ public class SectorController {
             @RequestParam String acronym
     ) {
         return ResponseEntity.ok(this.sectorService.list(pageable, name, acronym));
+    }
+
+    @PutMapping("/{sectorId}")
+    public ResponseEntity<SectorResponse> update(@PathVariable UUID sectorId, @RequestBody UpdateSectorRequest request) {
+        return ResponseEntity.ok(this.sectorService.update(sectorId, request));
     }
 }

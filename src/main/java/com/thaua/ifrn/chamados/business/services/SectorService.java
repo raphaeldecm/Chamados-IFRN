@@ -1,6 +1,7 @@
 package com.thaua.ifrn.chamados.business.services;
 
 import com.thaua.ifrn.chamados.http.dto.request.sectors.CreateSectorRequest;
+import com.thaua.ifrn.chamados.http.dto.request.sectors.UpdateSectorRequest;
 import com.thaua.ifrn.chamados.http.dto.response.sectors.SectorResponse;
 import com.thaua.ifrn.chamados.http.exceptions.SectorNotFoundException;
 import com.thaua.ifrn.chamados.persistence.entities.SectorEntity;
@@ -57,5 +58,14 @@ public class SectorService {
 
         return this.sectorRepository.findAll(specification, pageable)
                 .map(this.sectorMapper::map);
+    }
+
+    public SectorResponse update(UUID sectorId, UpdateSectorRequest request) {
+        SectorEntity sectorFound = this.sectorRepository.findById(sectorId)
+                .orElseThrow(SectorNotFoundException::new);
+
+        sectorFound.update(this.sectorMapper.map(request));
+
+        return this.sectorMapper.map(this.sectorRepository.save(sectorFound));
     }
 }
