@@ -4,6 +4,10 @@ import com.thaua.ifrn.chamados.business.services.CategoryService;
 import com.thaua.ifrn.chamados.http.dto.request.categories.CreateCategoryRequest;
 import com.thaua.ifrn.chamados.http.dto.response.categories.CategoryResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,5 +27,16 @@ public class CategoryController {
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryResponse> fetch(@PathVariable UUID categoryId) {
         return ResponseEntity.ok(this.categoryService.fetch(categoryId));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<CategoryResponse>> list(
+            @ParameterObject @PageableDefault Pageable pageable,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String sectorName,
+            @RequestParam(required = false) UUID sectorId
+    ) {
+        return ResponseEntity.ok(this.categoryService.list(pageable, name, description, sectorName, sectorId))
     }
 }

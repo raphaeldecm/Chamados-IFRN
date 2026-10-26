@@ -36,8 +36,8 @@ public class SectorController {
     @GetMapping
     public ResponseEntity<Page<SectorResponse>> list(
             @ParameterObject @PageableDefault Pageable pageable,
-            @RequestParam String name,
-            @RequestParam String acronym
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String acronym
     ) {
         return ResponseEntity.ok(this.sectorService.list(pageable, name, acronym));
     }
