@@ -32,6 +32,7 @@ public class SecurityConfiguration {
         .addFilterBefore(this.authFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests( authorize -> authorize
                 .requestMatchers("/swagger/**", "/swagger-ui/**", "/v3/**").permitAll()
+                .requestMatchers("/auth/register/technical").hasRole(Role.ADMIN.name())
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/server/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/sectors/**").authenticated()

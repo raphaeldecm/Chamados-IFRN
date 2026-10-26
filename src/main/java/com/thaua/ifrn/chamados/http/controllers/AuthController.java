@@ -3,8 +3,9 @@ package com.thaua.ifrn.chamados.http.controllers;
 import com.thaua.ifrn.chamados.business.services.AuthService;
 import com.thaua.ifrn.chamados.http.dto.request.auth.LoginRequest;
 import com.thaua.ifrn.chamados.http.dto.request.auth.RegisterRequest;
+import com.thaua.ifrn.chamados.http.dto.request.technicals.CreateTechnicalRequest;
 import com.thaua.ifrn.chamados.http.dto.response.auth.AuthLoginResponse;
-import com.thaua.ifrn.chamados.http.dto.response.auth.AuthResponse;
+import com.thaua.ifrn.chamados.http.dto.response.technicals.TechnicalResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,11 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthLoginResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.authService.register(request));
+    }
+
+    @PostMapping("/register/technical")
+    public ResponseEntity<AuthLoginResponse> create(@RequestBody CreateTechnicalRequest request) {
+        return ResponseEntity.ok(this.authService.createTechnical(request));
     }
 
     @PostMapping("/login")

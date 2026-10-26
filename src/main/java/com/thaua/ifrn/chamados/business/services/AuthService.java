@@ -3,11 +3,16 @@ package com.thaua.ifrn.chamados.business.services;
 import com.thaua.ifrn.chamados.domain.enums.Role;
 import com.thaua.ifrn.chamados.http.dto.request.auth.LoginRequest;
 import com.thaua.ifrn.chamados.http.dto.request.auth.RegisterRequest;
+import com.thaua.ifrn.chamados.http.dto.request.technicals.CreateTechnicalRequest;
 import com.thaua.ifrn.chamados.http.dto.response.auth.AuthLoginResponse;
+import com.thaua.ifrn.chamados.http.exceptions.SectorNotFoundException;
+import com.thaua.ifrn.chamados.persistence.entities.SectorEntity;
+import com.thaua.ifrn.chamados.persistence.entities.TechnicalEntity;
 import com.thaua.ifrn.chamados.persistence.entities.TokenEntity;
 import com.thaua.ifrn.chamados.persistence.entities.UserEntity;
 import com.thaua.ifrn.chamados.persistence.mappers.AuthMapper;
-import com.thaua.ifrn.chamados.persistence.mappers.UserMapper;
+import com.thaua.ifrn.chamados.persistence.repositories.SectorRepository;
+import com.thaua.ifrn.chamados.persistence.repositories.TechnicalRepository;
 import com.thaua.ifrn.chamados.persistence.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +25,8 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+    private final SectorRepository sectorRepository;
+    private final TechnicalRepository technicalRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -47,16 +54,35 @@ public class AuthService {
 
         UserEntity saved = this.userRepository.save(preSaved);
 
-        saved.setToken(
+        saved = this.setToken(saved);
+
+        return authMapper.map(saved.getToken());
+    }
+
+    public AuthLoginResponse createTechnical(CreateTechnicalRequest request) {
+        SectorEntity sectorFound = this.sectorRepository.findById(request.sectorId())
+                .orElseThrow(SectorNotFoundException::new);
+
+        TechnicalEntity preSaved = this.authMapper.map(request);
+        preSaved.setRole(Role.TECHNICAL);
+        preSaved.setSector(sectorFound);
+        preSaved.setRegistration(new Random().nextLong());
+        preSaved.setPassword(this.passwordEncoder.encode(request.password()));
+
+        TechnicalEntity saved = this.technicalRepository.save(preSaved);
+        saved = this.setToken(saved);
+        return authMapper.map(saved.getToken());
+    }
+
+    private <T extends UserEntity> T setToken(T user) {
+        user.setToken(
                 TokenEntity.builder()
-                        .accessToken(this.tokenService.generateToken(saved))
-                        .refreshToken(this.tokenService.generateToken(saved))
-                        .user(saved)
+                        .accessToken(this.tokenService.generateToken(user))
+                        .refreshToken(this.tokenService.generateToken(user))
+                        .user(user)
                         .build()
         );
 
-        saved = this.userRepository.save(saved);
-
-        return authMapper.map(saved.getToken());
+        return this.userRepository.save(user);
     }
 }
