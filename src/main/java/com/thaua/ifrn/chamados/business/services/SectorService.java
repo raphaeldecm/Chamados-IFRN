@@ -7,6 +7,9 @@ import com.thaua.ifrn.chamados.persistence.entities.SectorEntity;
 import com.thaua.ifrn.chamados.persistence.mappers.SectorMapper;
 import com.thaua.ifrn.chamados.persistence.repositories.SectorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -27,5 +30,32 @@ public class SectorService {
                 this.sectorRepository.findById(sectorId)
                         .orElseThrow(SectorNotFoundException::new)
         );
+    }
+
+    public Page<SectorResponse> list(Pageable pageable, String name, String acronym) {
+        Specification<SectorEntity> byName = ((root, query, criteriaBuilder) ->
+                name == null || name.isBlank()
+                ? criteriaBuilder.conjunction()
+                : criteriaBuilder.like(
+                                criteriaBuilder.lower(root.get("name")),
+                                "%" + name.toLowerCase() + "%"
+                        )
+                );
+
+        Specification<SectorEntity> byAcronym = ((root, query, criteriaBuilder) ->
+                acronym == null || acronym.isBlank()
+                        ? criteriaBuilder.conjunction()
+                        : criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("acronym")),
+                        "%" + acronym.toLowerCase() + "%"
+                )
+        );
+
+
+        Specification<SectorEntity> specification = byName.and(byAcronym);
+
+
+        return this.sectorRepository.findAll(specification, pageable)
+                .map(this.sectorMapper::map);
     }
 }
