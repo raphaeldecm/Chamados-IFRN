@@ -2,6 +2,8 @@ package com.thaua.ifrn.chamados.business;
 
 import com.thaua.ifrn.chamados.http.dto.request.calleds.CalledRequest;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledResponse;
+import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledWithInteractionsResponse;
+import com.thaua.ifrn.chamados.http.exceptions.CalledNotFoundException;
 import com.thaua.ifrn.chamados.http.exceptions.CategoryNotFoundException;
 import com.thaua.ifrn.chamados.persistence.entities.CalledEntity;
 import com.thaua.ifrn.chamados.persistence.entities.CategoryEntity;
@@ -11,6 +13,8 @@ import com.thaua.ifrn.chamados.persistence.repositories.CalledRepository;
 import com.thaua.ifrn.chamados.persistence.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +32,12 @@ public class CalledService {
         preSaved.setCategory(categoryFound);
 
         return this.calledMapper.map(this.calledRepository.save(preSaved));
+    }
+
+    public CalledWithInteractionsResponse fetch(UUID calledId) {
+        CalledEntity calledFound = this.calledRepository.findByIdWithInteractions(calledId)
+                .orElseThrow(CalledNotFoundException::new);
+
+        return this.calledMapper.mapWithInteractions(calledFound);
     }
 }

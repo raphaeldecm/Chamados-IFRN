@@ -17,7 +17,7 @@ public class InteractionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "interaction_id")
-    private UUID interactionId;
+    private UUID id;
 
     private String text;
 
@@ -27,7 +27,7 @@ public class InteractionEntity {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private UserEntity authorId;
+    private UserEntity author;
 
     @Builder.Default
     @CreationTimestamp

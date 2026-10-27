@@ -2,6 +2,7 @@ package com.thaua.ifrn.chamados.persistence.mappers;
 
 import com.thaua.ifrn.chamados.http.dto.request.calleds.CalledRequest;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledResponse;
+import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledWithInteractionsResponse;
 import com.thaua.ifrn.chamados.persistence.entities.CalledEntity;
 import org.mapstruct.Mapper;
 
@@ -9,4 +10,5 @@ import org.mapstruct.Mapper;
 public interface CalledMapper {
     CalledEntity map(CalledRequest request);
     CalledResponse map(CalledEntity entity);
+    CalledWithInteractionsResponse mapWithInteractions(CalledEntity entity);
 }

@@ -14,9 +14,9 @@ public record CalledResponse(
         Priority priority,
         CalledStatus status,
         String solution,
-        CalledRequester requester,
-        CalledTechnical technical,
-        CalledCategory category,
+        CalledRequesterResponse requester,
+        CalledTechnicalResponse technical,
+        CalledCategoryResponse category,
         LocalDateTime openingDate,
         LocalDateTime closedDate
 ) {

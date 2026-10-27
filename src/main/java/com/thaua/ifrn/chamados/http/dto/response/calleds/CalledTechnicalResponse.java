@@ -2,8 +2,9 @@ package com.thaua.ifrn.chamados.http.dto.response.calleds;
 
 import java.util.UUID;
 
-public record CalledCategory(
+public record CalledTechnicalResponse(
         UUID id,
-        String name
+        String email,
+        CalledTechnicalSectorResponse sector
 ) {
 }
