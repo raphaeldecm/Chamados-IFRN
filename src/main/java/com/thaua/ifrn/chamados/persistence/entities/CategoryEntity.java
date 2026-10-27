@@ -15,7 +15,7 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "category_id")
-    private UUID categoryId;
+    private UUID id;
 
     private String name;
 

@@ -19,7 +19,7 @@ public class CalledEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "called_id")
-    private UUID calledId;
+    private UUID id;
 
     private String title;
 
@@ -50,6 +50,7 @@ public class CalledEntity {
 
     @Builder.Default
     @Column(name = "opening_date")
+    @CreationTimestamp
     private LocalDateTime openingDate = LocalDateTime.now();
 
     @Builder.Default
