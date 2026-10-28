@@ -61,4 +61,8 @@ public class CalledEntity {
     @CreationTimestamp
     @Column(name = "closed_date")
     private LocalDateTime closedDate = LocalDateTime.now();
+
+    public void moveToSolving() {
+        this.status = CalledStatus.SOLVING;
+    }
 }

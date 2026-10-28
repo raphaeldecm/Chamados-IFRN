@@ -1,5 +1,6 @@
 package com.thaua.ifrn.chamados.persistence.repositories;
 
+import com.thaua.ifrn.chamados.domain.enums.CalledStatus;
 import com.thaua.ifrn.chamados.persistence.entities.CalledEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,4 +30,14 @@ public interface CalledRepository extends JpaRepository<CalledEntity, UUID>, Jpa
         OR t.id = :userId
     """)
     Page<CalledEntity> findAllByUserId(@Param(value = "userId") UUID userId, @Param(value = "pageable") Pageable pageable);
+
+    @Query("""
+        SELECT c FROM CalledEntity c
+        INNER JOIN c.technical t
+        INNER JOIN t.sector s
+        WHERE c.id = :calledId
+        AND s.id = :sectorId
+        AND c.status IN (com.thaua.ifrn.chamados.domain.enums.CalledStatus.OPENED)
+    """)
+    Optional<CalledEntity> findBySectorIdAndStatus(@Param(value = "calledId") UUID calledId, @Param(value = "sectorId") UUID sectorId, @Param(value = "calledStatus") CalledStatus calledStatus);
 }
