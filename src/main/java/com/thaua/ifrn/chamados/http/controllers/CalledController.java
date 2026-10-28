@@ -52,4 +52,12 @@ public class CalledController {
     ) {
         return ResponseEntity.ok(this.calledService.list(pageable, title, description, place, priority, status, solution, requester, technical, category));
     }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<Page<CalledResponse>> listByUser(
+            @PathVariable UUID userId,
+            @ParameterObject @PageableDefault Pageable pageable
+    ) {
+        return ResponseEntity.ok(this.calledService.listByUser(userId, pageable));
+    }
 }

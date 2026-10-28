@@ -138,8 +138,14 @@ public class CalledService {
                 .and(byRequester)
                 .and(byTechnical)
                 .and(byCategory);
-
+        
         return this.calledRepository.findAll(specification, pageable)
                 .map(this.calledMapper::map);
+    }
+
+    public Page<CalledResponse> listByUser(UUID userId, Pageable pageable) {
+        return this.calledRepository.findAllByUserId(userId, pageable)
+                .map(this.calledMapper::map);
+
     }
 }
