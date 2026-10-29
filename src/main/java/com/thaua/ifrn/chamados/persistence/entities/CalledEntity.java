@@ -57,10 +57,8 @@ public class CalledEntity {
     @CreationTimestamp
     private LocalDateTime openingDate = LocalDateTime.now();
 
-    @Builder.Default
-    @CreationTimestamp
     @Column(name = "closed_date")
-    private LocalDateTime closedDate = LocalDateTime.now();
+    private LocalDateTime closedDate;
 
     public void moveToSolving() {
         this.status = CalledStatus.SOLVING;
@@ -83,7 +81,7 @@ public class CalledEntity {
     }
 
     public boolean isSolving() {
-        return this.status.equals(CalledStatus.SOLVED);
+        return this.status.equals(CalledStatus.SOLVING);
     }
 
     public boolean isNotSolving() {

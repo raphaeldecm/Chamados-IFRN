@@ -16,8 +16,8 @@ import java.util.UUID;
 @Repository
 public interface CalledRepository extends JpaRepository<CalledEntity, UUID>, JpaSpecificationExecutor<CalledEntity> {
     @Query("""
-        SELECT c FROM CalledEntity c
-        JOIN FETCH c.interactions
+        SELECT DISTINCT c FROM CalledEntity c
+        LEFT JOIN FETCH c.interactions
         WHERE c.id = :calledId
     """)
     Optional<CalledEntity> findByIdWithInteractions(@Param(value = "calledId") UUID calledId);
@@ -26,7 +26,7 @@ public interface CalledRepository extends JpaRepository<CalledEntity, UUID>, Jpa
         SELECT c FROM CalledEntity c
         LEFT JOIN c.requester r
         LEFT JOIN c.technical t
-        WHERE (r.id = :userID OR t.id = :userId)
+        WHERE (r.id = :userId OR t.id = :userId)
     """)
     Page<CalledEntity> findAllByUserId(@Param(value = "userId") UUID userId, @Param(value = "pageable") Pageable pageable);
 

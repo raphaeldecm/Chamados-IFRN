@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS calleds_tb(
     status VARCHAR(50) NOT NULL DEFAULT 'OPENED',
     solution TEXT,
     requester_id UUID NOT NULL,
-    technical_id UUID NOT NULL,
+    technical_id UUID,
     category_id UUID NOT NULL,
     opening_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     closed_date TIMESTAMP,
