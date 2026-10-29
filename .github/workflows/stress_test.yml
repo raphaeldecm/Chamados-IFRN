@@ -30,7 +30,7 @@ jobs:
         uses: grafana/setup-k6-action@v1
 
       - name: Iniciar o banco de dados
-        run: docker compose up -d --wait --wait-timeout 120
+        run: docker compose up ifrn_datasource -d --wait --wait-timeout 120
 
       - name: Compilar e testar a aplicação
         run: ./mvnw --batch-mode verify
