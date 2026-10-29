@@ -69,4 +69,16 @@ public class CalledEntity {
     public void moveToSolved() {
         this.status = CalledStatus.SOLVED;
     }
+
+    public void moveToCancelled() {
+        this.status = CalledStatus.CANCELLED;
+    }
+
+    public boolean isOpen() {
+        return this.status.equals(CalledStatus.OPENED);
+    }
+
+    public boolean isNotOpen() {
+        return !this.isOpen();
+    }
 }

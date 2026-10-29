@@ -7,6 +7,7 @@ import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledResponse;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledWithInteractionsResponse;
 import com.thaua.ifrn.chamados.http.exceptions.CalledNotFoundException;
 import com.thaua.ifrn.chamados.http.exceptions.CategoryNotFoundException;
+import com.thaua.ifrn.chamados.http.exceptions.InvalidCalledOperation;
 import com.thaua.ifrn.chamados.persistence.entities.CalledEntity;
 import com.thaua.ifrn.chamados.persistence.entities.CategoryEntity;
 import com.thaua.ifrn.chamados.persistence.entities.TechnicalEntity;
@@ -147,5 +148,16 @@ public class CalledService {
         return this.calledRepository.findAllByUserId(userId, pageable)
                 .map(this.calledMapper::map);
 
+    }
+
+    public CalledResponse cancel(UserEntity currentUser, UUID calledId) {
+        CalledEntity calledFound = this.calledRepository.findByIdAndRequesterId(calledId, currentUser.getId())
+                .orElseThrow(CalledNotFoundException::new);
+
+        if (calledFound.isNotOpen()) throw new InvalidCalledOperation("Não é possível cancelar um chamado que não está aberto");
+
+        calledFound.moveToCancelled();
+
+        return this.calledMapper.map(this.calledRepository.save(calledFound));
     }
 }

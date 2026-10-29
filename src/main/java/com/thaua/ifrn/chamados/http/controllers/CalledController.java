@@ -24,14 +24,6 @@ import java.util.UUID;
 public class CalledController {
     private final CalledService calledService;
 
-    @PostMapping
-    public ResponseEntity<CalledResponse> openCalled(
-            @AuthenticationPrincipal UserEntity currentUser,
-            @RequestBody CalledRequest request
-    ) {
-        return ResponseEntity.ok(this.calledService.openCalled(currentUser, request));
-    }
-
     @GetMapping("/{calledId}")
     public ResponseEntity<CalledWithInteractionsResponse> fetch(@PathVariable UUID calledId) {
         return ResponseEntity.ok(this.calledService.fetch(calledId));
