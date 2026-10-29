@@ -1,6 +1,7 @@
 package com.thaua.ifrn.chamados.business.services;
 
 import com.thaua.ifrn.chamados.domain.enums.CalledStatus;
+import com.thaua.ifrn.chamados.http.dto.request.CalledSolutionRequest;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledResponse;
 import com.thaua.ifrn.chamados.http.exceptions.CalledNotFoundException;
 import com.thaua.ifrn.chamados.http.exceptions.TechnicalNotFoundException;
@@ -31,6 +32,15 @@ public class TechnicalService {
 
         calledFound.moveToSolving();
         calledFound.setTechnical(technicalFound);
+
+        return this.calledMapper.map(this.calledRepository.save(calledFound));
+    }
+
+    public CalledResponse solve(UserEntity userEntity, UUID calledId, CalledSolutionRequest request) {
+        CalledEntity calledFound = this.calledRepository.findByIdAndTechnicalIdAndStatus(calledId, userEntity.getId(), CalledStatus.SOLVING)
+                .orElseThrow(CalledNotFoundException::new);
+        calledFound.setSolution(request.solution());
+        calledFound.moveToSolved();
 
         return this.calledMapper.map(this.calledRepository.save(calledFound));
     }

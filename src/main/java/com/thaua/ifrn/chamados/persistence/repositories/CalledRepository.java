@@ -37,7 +37,16 @@ public interface CalledRepository extends JpaRepository<CalledEntity, UUID>, Jpa
         INNER JOIN t.sector s
         WHERE c.id = :calledId
         AND s.id = :sectorId
-        AND c.status IN (com.thaua.ifrn.chamados.domain.enums.CalledStatus.OPENED)
+        AND c.status = :status
     """)
-    Optional<CalledEntity> findBySectorIdAndStatus(@Param(value = "calledId") UUID calledId, @Param(value = "sectorId") UUID sectorId, @Param(value = "calledStatus") CalledStatus calledStatus);
+    Optional<CalledEntity> findBySectorIdAndStatus(@Param(value = "calledId") UUID calledId, @Param(value = "sectorId") UUID sectorId, @Param(value = "status") CalledStatus calledStatus);
+
+    @Query("""  
+        SELECT c FROM CalledEntity c
+        INNER JOIN c.technical t
+        WHERE c.id = :calledId
+        AND t.id = :technicalId
+        AND c.status = :status
+    """)
+    Optional<CalledEntity> findByIdAndTechnicalIdAndStatus(@Param(value = "calledId") UUID calledId, @Param(value = "technicalId") UUID technicalId, @Param(value = "status") CalledStatus status);
 }

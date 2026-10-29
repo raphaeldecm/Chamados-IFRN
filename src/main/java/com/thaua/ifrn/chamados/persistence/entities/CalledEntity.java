@@ -65,4 +65,8 @@ public class CalledEntity {
     public void moveToSolving() {
         this.status = CalledStatus.SOLVING;
     }
+
+    public void moveToSolved() {
+        this.status = CalledStatus.SOLVED;
+    }
 }

@@ -1,6 +1,7 @@
 package com.thaua.ifrn.chamados.http.controllers;
 
 import com.thaua.ifrn.chamados.business.services.TechnicalService;
+import com.thaua.ifrn.chamados.http.dto.request.CalledSolutionRequest;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledResponse;
 import com.thaua.ifrn.chamados.persistence.entities.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,14 @@ public class TechnicalController {
             @PathVariable UUID calledId
     ) {
         return ResponseEntity.ok(this.technicalService.assign(currentUser, calledId));
+    }
+
+    @PatchMapping("/calleds/solve/{calledId}")
+    public ResponseEntity<CalledResponse> solve(
+            @AuthenticationPrincipal UserEntity userEntity,
+            @PathVariable UUID calledId,
+            @RequestBody CalledSolutionRequest request
+    ) {
+        return ResponseEntity.ok(this.technicalService.solve(userEntity, calledId, request));
     }
 }
