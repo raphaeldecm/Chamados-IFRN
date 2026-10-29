@@ -24,10 +24,9 @@ public interface CalledRepository extends JpaRepository<CalledEntity, UUID>, Jpa
 
     @Query("""
         SELECT c FROM CalledEntity c
-        INNER JOIN c.requester r
-        INNER JOIN c.technical t
-        WHERE r.id = :userID
-        OR t.id = :userId
+        LEFT JOIN c.requester r
+        LEFT JOIN c.technical t
+        WHERE (r.id = :userID OR t.id = :userId)
     """)
     Page<CalledEntity> findAllByUserId(@Param(value = "userId") UUID userId, @Param(value = "pageable") Pageable pageable);
 
@@ -56,4 +55,13 @@ public interface CalledRepository extends JpaRepository<CalledEntity, UUID>, Jpa
         AND r.id = :requesterId
     """)
     Optional<CalledEntity> findByIdAndRequesterId(@Param(value = "calledId") UUID calledId, @Param(value = "requesterId") UUID requesterId);
+
+    @Query("""
+        SELECT c FROM CalledEntity c
+        LEFT JOIN c.requester r
+        LEFT JOIN c.technical t
+        WHERE c.id = :calledId
+        AND (r.id = :userId OR t.id = :userId)
+    """)
+    Optional<CalledEntity> findByIdAndUserId(@Param(value = "calledId") UUID calledId, @Param(value = "userId") UUID userId);
 }

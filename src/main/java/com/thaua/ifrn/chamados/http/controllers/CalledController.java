@@ -3,7 +3,7 @@ package com.thaua.ifrn.chamados.http.controllers;
 import com.thaua.ifrn.chamados.business.CalledService;
 import com.thaua.ifrn.chamados.domain.enums.CalledStatus;
 import com.thaua.ifrn.chamados.domain.enums.Priority;
-import com.thaua.ifrn.chamados.http.dto.request.calleds.CalledRequest;
+import com.thaua.ifrn.chamados.http.dto.request.interactions.CreateInteractionRequest;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledResponse;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledWithInteractionsResponse;
 import com.thaua.ifrn.chamados.persistence.entities.UserEntity;
@@ -23,6 +23,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CalledController {
     private final CalledService calledService;
+
+    @PostMapping("{calledId}/interactions")
+    public ResponseEntity<CalledWithInteractionsResponse> interact(
+            @AuthenticationPrincipal UserEntity userEntity,
+            @PathVariable UUID calledId,
+            @RequestBody CreateInteractionRequest request
+    ) {
+        return ResponseEntity.ok(this.calledService.interact(userEntity, calledId, request));
+    }
 
     @GetMapping("/{calledId}")
     public ResponseEntity<CalledWithInteractionsResponse> fetch(@PathVariable UUID calledId) {

@@ -3,15 +3,13 @@ package com.thaua.ifrn.chamados.business;
 import com.thaua.ifrn.chamados.domain.enums.CalledStatus;
 import com.thaua.ifrn.chamados.domain.enums.Priority;
 import com.thaua.ifrn.chamados.http.dto.request.calleds.CalledRequest;
+import com.thaua.ifrn.chamados.http.dto.request.interactions.CreateInteractionRequest;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledResponse;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledWithInteractionsResponse;
 import com.thaua.ifrn.chamados.http.exceptions.CalledNotFoundException;
 import com.thaua.ifrn.chamados.http.exceptions.CategoryNotFoundException;
 import com.thaua.ifrn.chamados.http.exceptions.InvalidCalledOperation;
-import com.thaua.ifrn.chamados.persistence.entities.CalledEntity;
-import com.thaua.ifrn.chamados.persistence.entities.CategoryEntity;
-import com.thaua.ifrn.chamados.persistence.entities.TechnicalEntity;
-import com.thaua.ifrn.chamados.persistence.entities.UserEntity;
+import com.thaua.ifrn.chamados.persistence.entities.*;
 import com.thaua.ifrn.chamados.persistence.mappers.CalledMapper;
 import com.thaua.ifrn.chamados.persistence.repositories.CalledRepository;
 import com.thaua.ifrn.chamados.persistence.repositories.CategoryRepository;
@@ -22,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -159,5 +158,24 @@ public class CalledService {
         calledFound.moveToCancelled();
 
         return this.calledMapper.map(this.calledRepository.save(calledFound));
+    }
+
+    public CalledWithInteractionsResponse interact(UserEntity userEntity, UUID calledId, CreateInteractionRequest request) {
+        CalledEntity calledFound = this.calledRepository.findByIdAndUserId(calledId, userEntity.getId())
+                .orElseThrow(CalledNotFoundException::new);
+
+        InteractionEntity newInteraction = InteractionEntity.builder()
+                .text(request.text())
+                .author(userEntity)
+                .called(calledFound)
+                .build();
+
+        if (calledFound.getInteractions() == null || calledFound.getInteractions().isEmpty()) {
+            calledFound.setInteractions(new ArrayList<>());
+        }
+
+        calledFound.getInteractions().add(newInteraction);
+
+        return this.calledMapper.mapWithInteractions(this.calledRepository.save(calledFound));
     }
 }

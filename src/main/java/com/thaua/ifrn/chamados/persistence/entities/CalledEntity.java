@@ -49,7 +49,7 @@ public class CalledEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
-    @OneToMany(mappedBy = "called")
+    @OneToMany(mappedBy = "called", cascade = CascadeType.ALL)
     List<InteractionEntity> interactions;
 
     @Builder.Default
