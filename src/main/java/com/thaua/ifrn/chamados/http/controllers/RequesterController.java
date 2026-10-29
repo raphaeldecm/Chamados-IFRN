@@ -1,6 +1,6 @@
 package com.thaua.ifrn.chamados.http.controllers;
 
-import com.thaua.ifrn.chamados.business.CalledService;
+import com.thaua.ifrn.chamados.business.services.CalledService;
 import com.thaua.ifrn.chamados.http.dto.request.calleds.CalledRequest;
 import com.thaua.ifrn.chamados.http.dto.response.calleds.CalledResponse;
 import com.thaua.ifrn.chamados.persistence.entities.UserEntity;

@@ -1,4 +1,4 @@
-package com.thaua.ifrn.chamados.business;
+package com.thaua.ifrn.chamados.business.services;
 
 import com.thaua.ifrn.chamados.domain.enums.CalledStatus;
 import com.thaua.ifrn.chamados.domain.enums.Priority;

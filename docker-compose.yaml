@@ -1,4 +1,16 @@
 services:
+  ifrn_chamados:
+    build: .
+    container_name: ifrn_chamados
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      ifrn_datasource:
+          condition: service_healthy
+
+
   ifrn_datasource:
     image: postgres:17
     container_name: ifrn_datasource
@@ -10,6 +22,12 @@ services:
       - "5432:5432"
     volumes:
       - ifrn_data_base:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DATASOURCE_USERNAME} -d ${DATASOURCE_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   ifrn_data_base:
