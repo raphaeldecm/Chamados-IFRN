@@ -81,4 +81,12 @@ public class CalledEntity {
     public boolean isNotOpen() {
         return !this.isOpen();
     }
+
+    public boolean isSolving() {
+        return this.status.equals(CalledStatus.SOLVED);
+    }
+
+    public boolean isNotSolving() {
+        return !this.isSolving();
+    }
 }

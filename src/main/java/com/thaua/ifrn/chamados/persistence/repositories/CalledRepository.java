@@ -46,9 +46,8 @@ public interface CalledRepository extends JpaRepository<CalledEntity, UUID>, Jpa
         INNER JOIN c.technical t
         WHERE c.id = :calledId
         AND t.id = :technicalId
-        AND c.status = :status
     """)
-    Optional<CalledEntity> findByIdAndTechnicalIdAndStatus(@Param(value = "calledId") UUID calledId, @Param(value = "technicalId") UUID technicalId, @Param(value = "status") CalledStatus status);
+    Optional<CalledEntity> findByIdAndTechnicalId(@Param(value = "calledId") UUID calledId, @Param(value = "technicalId") UUID technicalId);
 
     @Query("""
         SELECT c FROM CalledEntity c
